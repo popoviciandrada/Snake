@@ -5,9 +5,34 @@ using namespace std;
 bool pierdut;
 const int lungime=20;
 const int latime=20;
-int dx,dy,fructdx,fructdy,scor,coadaX[100],coadaY[100],coadaLG;
+int dx,dy,fructdx,fructdy,scor,coadaX[100],coadaY[100],coadaLG,specialaX,specialaY,aparSpeciala;
 enum directie {STOP=0,STANGA,DREAPTA,SUS,JOS};
 directie dir;
+void Initializare();
+void Harta();
+void Intrare();
+void LogicaTrece();
+void LogicaNuTrece();
+int main()
+{
+     int k;
+    cout<<"Pentru modul in care sarpele trece prin perete introdu 1";
+    cout<<endl;
+    cout<<"Pentru modul in care sarpele nu trece prin perete introdu 2";
+    cout<<endl;
+    cin>>k;
+    Initializare();
+    while(!pierdut)
+    {
+        Harta();
+        Intrare();
+        if (k==2)
+        LogicaNuTrece();
+        Sleep(200);
+    }
+    return 0;
+}
+
 void Initializare ()
 {
     pierdut=false;
@@ -91,7 +116,7 @@ void Intrare()
 
 
 }
-void Logica ()
+void LogicaNuTrece()
 { int Xanterior=coadaX[0];
   int Yanterior=coadaY[0];
   int X2anterior,Y2anterior;
@@ -126,10 +151,7 @@ void Logica ()
   }
  if(dx>latime || dx<0 || dy>lungime || dy<0 )
     pierdut=true;
-  //if(dx >= latime) dx=0;
-  //else if (dx<0) dx=latime-1;
-  //if(dy >= lungime) dy=0;
-  //else if (dy<0) dy=lungime-1;
+
   for(int i=0;i<coadaLG;i++)
     if(coadaX[i]==dx && coadaY[i]==dy)
      pierdut = true;
@@ -141,16 +163,4 @@ void Logica ()
       fructdy=rand()%lungime;
   }
 
-}
-int main()
-{
-    Initializare();
-    while(!pierdut)
-    {
-        Harta();
-        Intrare();
-        Logica();
-        Sleep(200);
-    }
-    return 0;
 }
