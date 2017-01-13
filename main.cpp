@@ -23,6 +23,11 @@ void LogicaNuTrece();
 void Intrare1();
 void LogicaTreceMP();
 void Initializare1();
+void LogicaNuTrecePU();
+void LogicaNuTreceZid();
+void LogicaTrecePU();
+void LogicaTreceZid();
+
 int scormax(int x[],int n);
 int main()
 {    int k,l,mp,sp,cnrjoc=0;
@@ -38,7 +43,7 @@ int main()
     {
         cout<<"1.Single player";
     cout<<endl;
-    cout<<"2.Multiplayer";
+    cout<<"2.Multiplayer(nu merge)";
     cout<<endl;
     cin>>mp;
 
@@ -57,28 +62,53 @@ int main()
     cout<<"2.Modul in care sarpele trece prin perete ";
     cout<<endl;
     cin>>k;
-        while(!pierdut)
-    {
-         if(l==1)
-        Harta1();
-        else if(l==2)
-            Harta2();
-        else if(l==3)
+       if(l==1)
+       {
+           while(!pierdut)
+           {
+               Harta1();
+               Intrare();
+               if(k==1)
+                LogicaNuTrece();
+               else if(k==2)
+                LogicaTrece();
+                Sleep(200);
+                vecScor[cnrjoc++]=scor;
+           }
+       }
+       else if(l==2)
+       {
+           while(!pierdut)
+           {
+               Harta2();
+               Intrare();
+               if(k==1)
+                LogicaNuTrecePU();
+               else if(k==2)
+                LogicaTrecePU();
+                Sleep(200);
+                vecScor[cnrjoc++]=scor;
+           }
+       }
+       else if(l==3)
+       {   while(!pierdut)
+           {
             Harta4();
-        Intrare();
-        if(k==1)
-        LogicaNuTrece();
-        else if (k==2)
-        LogicaTrece();
-        Sleep(200);
-        vecScor[nrjoc++]=scor;
-    }
+           Intrare();
+           if(k==1)
+            LogicaNuTreceZid();
+           else if(k==2)
+            LogicaTreceZid();
+            Sleep(200);
+            vecScor[cnrjoc++]=scor;
+           }
+       }
     }
     else if (mp==2)
     {
         Initializare1();
     while(!pierdut)
-    {   cnrjoc++;
+    {
         Harta1();
         Harta3();
         Intrare();
@@ -92,7 +122,8 @@ int main()
     else if(sp==2)
     {
         int a=scormax(vecScor,cnrjoc);
-        cout<<a;
+        cout<<"Scorul maxim este"<<a;
+        cout<<endl;
     }
 
 
@@ -273,20 +304,7 @@ void LogicaNuTrece ()
       fructdx=rand()%latime;
       fructdy=rand()%lungime;
   }
- if(dx==specialaX && dy==specialaY)
-    {
-        coadaLG--;
-        scor+=2;
-        specialaX=rand()%latime;
-        specialaY=rand()%lungime;
-    }
-        if(dx==capcanaX && dy==capcanaY)
-    {
-        coadaLG+=2;
-        scor=scor-3;
-        specialaX=rand()%latime;
-        specialaY=rand()%lungime;
-    }
+
 }
 void LogicaTrece ()
 { int Xanterior=coadaX[0];
@@ -568,15 +586,6 @@ void Harta4 ()
                 aparSpeciala++;
             }
 
-            else if(i==specialaY && j==specialaX && aparSpeciala%5==0)
-            {
-                cout<<"2";
-
-            }
-            else if(i==capcanaY && j==capcanaX && aparSpeciala%3==0)
-            {
-                cout<<"3";
-            }
             else if(i==zidY && j==zidX && aparSpeciala%2==0)
             {
                     cout<<"|";
@@ -655,7 +664,7 @@ int scormax(int x[],int n)
     }
     return x[0];
 }
-void LogicaNuTrece ()
+void LogicaNuTrecePU ()
 { int Xanterior=coadaX[0];
   int Yanterior=coadaY[0];
   int X2anterior,Y2anterior;
@@ -781,5 +790,131 @@ void LogicaTrecePU ()
         specialaX=rand()%latime;
         specialaY=rand()%lungime;
     }
+
+}
+void LogicaTreceZid ()
+{ int Xanterior=coadaX[0];
+  int Yanterior=coadaY[0];
+  int X2anterior,Y2anterior;
+  coadaX[0]=dx;
+  coadaY[0]=dy;
+  for(int i=1;i<coadaLG;i++)
+  {
+      X2anterior=coadaX[i];
+      Y2anterior=coadaY[i];
+      coadaX[i]=Xanterior;
+      coadaY[i]=Yanterior;
+      Xanterior=X2anterior;
+      Yanterior=Y2anterior;
+  }
+  switch(dir)
+  {
+      case SUS:
+          dy--;
+          break;
+      case JOS:
+          dy++;
+          break;
+      case STANGA:
+          dx--;
+          break;
+      case DREAPTA:
+          dx++;
+          break;
+      default:
+        break;
+
+  }
+
+  if(dx >= latime) dx=0;
+  else if (dx<0) dx=latime-1;
+  if(dy >= lungime) dy=0;
+  else if (dy<0) dy=lungime-1;
+
+  for(int i=0;i<coadaLG;i++)
+    if(coadaX[i]==dx && coadaY[i]==dy)
+     pierdut = true;
+  if(dx==zidX && dy==zidY && zidX!=fructdx && zidY!=fructdy)
+    pierdut=true;
+   if(dx==zid1X && dy==zid1Y &&zid1X!=fructdx && zid1Y!=fructdy)
+    pierdut=true;
+  if(dx==zid2X && dy==zid2Y&& zid2X!=fructdx && zid2Y!=fructdy)
+    pierdut=true;
+  if(dx==zid3X && dy==zid3Y&& zid3X!=fructdx && zid3Y!=fructdy)
+    pierdut=true;
+  if(dx==zid4X && dy==zid4Y&& zid4X!=fructdx && zid4Y!=fructdy)
+    pierdut=true;
+  if(dx==zid5X && dy==zid5Y&& zid5X!=fructdx && zid5Y!=fructdy)
+    pierdut=true;
+  if(dx==fructdx && dy==fructdy)
+  {
+      coadaLG++;
+      scor++;
+      fructdx=rand()%latime;
+      fructdy=rand()%lungime;
+  }
+
+
+}
+void LogicaNuTreceZid ()
+{ int Xanterior=coadaX[0];
+  int Yanterior=coadaY[0];
+  int X2anterior,Y2anterior;
+  coadaX[0]=dx;
+  coadaY[0]=dy;
+  for(int i=1;i<coadaLG;i++)
+  {
+      X2anterior=coadaX[i];
+      Y2anterior=coadaY[i];
+      coadaX[i]=Xanterior;
+      coadaY[i]=Yanterior;
+      Xanterior=X2anterior;
+      Yanterior=Y2anterior;
+  }
+  switch(dir)
+  {
+      case SUS:
+          dy--;
+          break;
+      case JOS:
+          dy++;
+          break;
+      case STANGA:
+          dx--;
+          break;
+      case DREAPTA:
+          dx++;
+          break;
+      default:
+        break;
+
+  }
+ if(dx>latime || dx<0 || dy>lungime || dy<0 )
+    pierdut=true;
+
+  for(int i=0;i<coadaLG;i++)
+    if(coadaX[i]==dx && coadaY[i]==dy)
+     pierdut = true;
+  if(dx==zidX && dy==zidY && zidX!=fructdx && zidY!=fructdy)
+    pierdut=true;
+   if(dx==zid1X && dy==zid1Y &&zid1X!=fructdx && zid1Y!=fructdy)
+    pierdut=true;
+  if(dx==zid2X && dy==zid2Y&& zid2X!=fructdx && zid2Y!=fructdy)
+    pierdut=true;
+  if(dx==zid3X && dy==zid3Y&& zid3X!=fructdx && zid3Y!=fructdy)
+    pierdut=true;
+  if(dx==zid4X && dy==zid4Y&& zid4X!=fructdx && zid4Y!=fructdy)
+    pierdut=true;
+  if(dx==zid5X && dy==zid5Y&& zid5X!=fructdx && zid5Y!=fructdy)
+    pierdut=true;
+
+  if(dx==fructdx && dy==fructdy)
+  {
+      coadaLG++;
+      scor++;
+      fructdx=rand()%latime;
+      fructdy=rand()%lungime;
+  }
+
 
 }
