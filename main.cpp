@@ -5,16 +5,22 @@ using namespace std;
 bool pierdut;
 const int lungime=20;
 const int latime=20;
-int dx,dy,fructdx,fructdy,scor,coadaX[100],coadaY[100],coadaLG;
+int dx,dy,fructdx,fructdy,scor,coadaX[100],coadaY[100],coadaLG,specialaX,specialaY,aparSpeciala,capcanaX,capcanaY;
 enum directie {STOP=0,STANGA,DREAPTA,SUS,JOS};
 directie dir;
 void Initializare();
-void Harta();
+void Harta2();
+void Harta1();
 void Intrare();
 void LogicaTrece();
 void LogicaNuTrece();
 int main()
-{    int k;
+{    int k,l;
+    cout<<"Harta normala -> tasta 1 ";
+    cout<<endl;
+    cout<<"Harta power up -> tasta 2";
+    cout<<endl;
+    cin>>l;
     cout<<"Pentru modul in care sarpele trece prin perete introdu 1";
     cout<<endl;
     cout<<"Pentru modul in care sarpele nu trece prin perete introdu 2";
@@ -22,8 +28,10 @@ int main()
     cin>>k;
     Initializare();
     while(!pierdut)
-    {
-        Harta();
+    {    if(l==1)
+        Harta1();
+        else if(l==2)
+            Harta2();
         Intrare();
         if(k==1)
         LogicaTrece();
@@ -40,13 +48,14 @@ void Initializare ()
     dy=lungime/2;
     fructdx=rand()%latime;
     fructdy=rand()%lungime;
-
+    specialaX=rand()%latime;
+    specialaY=rand()%lungime;
     scor=0;
 }
-void Harta ()
+void Harta2 ()
 {
     system("cls");
-
+    aparSpeciala=0;
     for(int i=0;i<latime+2;i++)
         cout<<"$";
 
@@ -64,10 +73,18 @@ void Harta ()
             else if(i==fructdy && j==fructdx)
             {
                 cout<<"1";
-
+                aparSpeciala++;
             }
 
+            else if(i==specialaY && j==specialaX && aparSpeciala%5==0)
+            {
+                cout<<"2";
 
+            }
+            else if(i==capcanaY && j==capcanaX && aparSpeciala%1==0)
+            {
+                cout<<"3";
+            }
 
             else
             {    bool marireCoada=false;
@@ -75,7 +92,7 @@ void Harta ()
                 {
                     if(coadaX[k]==j &&  coadaY[k]==i)
                     {
-                        cout<<"o";
+                        cout<<"s";
                         marireCoada=true;
 
                     }
@@ -170,7 +187,20 @@ void LogicaNuTrece ()
       fructdx=rand()%latime;
       fructdy=rand()%lungime;
   }
-
+ if(dx==specialaX && dy==specialaY)
+    {
+        coadaLG--;
+        scor+=2;
+        specialaX=rand()%latime;
+        specialaY=rand()%lungime;
+    }
+        if(dx==capcanaX && dy==capcanaY)
+    {
+        coadaLG+=2;
+        scor=scor-3;
+        specialaX=rand()%latime;
+        specialaY=rand()%lungime;
+    }
 }
 void LogicaTrece ()
 { int Xanterior=coadaX[0];
@@ -222,7 +252,74 @@ void LogicaTrece ()
       fructdx=rand()%latime;
       fructdy=rand()%lungime;
   }
-
+  if(dx==specialaX && dy==specialaY)
+    {
+        coadaLG--;
+        scor+=2;
+        specialaX=rand()%latime;
+        specialaY=rand()%lungime;
+    }
+    if(dx==capcanaX && dy==capcanaY)
+    {
+        coadaLG+=2;
+        scor=scor-3;
+        specialaX=rand()%latime;
+        specialaY=rand()%lungime;
+    }
 
 }
+void Harta1 ()
+{
+    system("cls");
 
+    for(int i=0;i<latime+2;i++)
+        cout<<"$";
+
+      cout<<endl;
+    for(int i=0;i<lungime;i++)
+    {
+        for(int j=0;j<latime;j++)
+        {
+            if(j==0)
+                cout<<"$";
+
+            if(i==dy && j==dx)
+                cout<<"@";
+
+            else if(i==fructdy && j==fructdx)
+            {
+                cout<<"1";
+
+            }
+
+
+
+            else
+            {    bool marireCoada=false;
+                for(int k=0;k<coadaLG;k++)
+                {
+                    if(coadaX[k]==j &&  coadaY[k]==i)
+                    {
+                        cout<<"o";
+                        marireCoada=true;
+
+                    }
+
+                }
+                if(!marireCoada)
+                  cout<<" ";
+            }
+
+
+            if(j==latime-1)
+                cout<<"$";
+        }
+        cout<<endl;
+    }
+    for(int i=0;i<latime+2;i++)
+        cout<<"$";
+
+    cout<<endl;
+
+    cout<<"Scor:"<<scor<<endl;
+}
